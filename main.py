@@ -4,6 +4,8 @@
 ## Metadata:- https://fastapi.tiangolo.com/tutorial/metadata/
 # pagination:- https://nordicapis.com/everything-you-need-to-know-about-api-pagination/
 
+## Fast API:- https://fastapi.tiangolo.com/tutorial/dependencies/
+
 
 from typing import Union
 from fastapi import Depends, FastAPI #, HTTPException, status
@@ -93,7 +95,7 @@ app = FastAPI(
 )
 
 @app.get('/')
-def index(api_key: APIKey = Depends(auth.get_api_key)):
+async def index():
     return {
         "Document endpoint": "/docs",
         "API Endpoint": "/mentorskool/v1/sales",
@@ -101,9 +103,9 @@ def index(api_key: APIKey = Depends(auth.get_api_key)):
     }
 
 # Lockedown Route
-@app.get("/mentorskool/v1/sales", tags=["sales"])
+@app.get("/mentorskool/v1/sales", tags=["sales"], dependencies=[Depends(auth.get_api_key)])
 ## Union:- https://www.reddit.com/r/Python/comments/vcvyok/unionstr_none_vs_optionalstr/
-async def read_current_user(api_key: APIKey = Depends(auth.get_api_key), offset: Union[int, None] = None, limit: Union[int, None] = None):
+async def read_current_user(offset: Union[int, None] = None, limit: Union[int, None] = None):
     if not offset:
         offset = 1
     
