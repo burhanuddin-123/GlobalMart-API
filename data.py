@@ -45,7 +45,11 @@ def fetch_sales_data(start=1, limit=30):
             products_df.drop(col, axis=1, inplace=True)
 
     ## there are some nan values in products, thus fill out that nan with null
+    transaction_df = transaction_df.fillna("null")
     products_df = products_df.fillna("null")
+    orders_df = orders_df.fillna("null")
+    customers_df = customers_df.fillna("null")
+    vendors_df = vendors_df.fillna("null")
 
     ## In orders_df there is one column, that is in datetime64, thus for conversion in json we needs that into str. Thus convert thta into str
     orders_df["order_purchase_date"] = orders_df["order_purchase_date"].astype(str)
