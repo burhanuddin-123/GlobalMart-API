@@ -12,6 +12,7 @@ from fastapi import Depends, FastAPI #, HTTPException, status
 from paginate import paginate
 # New Imports for app.py
 from fastapi.security.api_key import APIKey
+from fastapi.responses import HTMLResponse
 import auth
 
 description = """
@@ -61,12 +62,12 @@ be covered would be:
 
 <h1>Your Responsibilities:</h1>
 Fetch the GlobalMart data from the given API, and fetch useful insights out of that.
-<br><br>
+<br>
 """
 
 tags_metadata = [
     {
-        "name": "sales",
+        "name": "Sales",
         "description": 
                 "<font size=3px>Returns the GlobalMart data containing the transactions, products, orders, customers and vendors data.\
                 Carefully go through the data element in the response, and fetch the data out of that. Whole globalmart data is divided\
@@ -94,16 +95,24 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
+html_response = """
+        <h1> Endpoints: </h1>
+        <font size=5px>
+        <ol>
+            <li> Document Endpoint: <b><u>/docs</u></b>
+            <li> API Endpoint: <b><u>/mentorskool/v1/sales</u></b>
+            <li> Readable Document: <b><u>/redoc</u></b>
+        </ol>
+        </font>
+    """
+
 @app.get('/')
 async def index():
-    return {
-        "Document endpoint": "/docs",
-        "API Endpoint": "/mentorskool/v1/sales",
-        "Readable document": "/redoc"
-    }
+    return HTMLResponse(content=html_response, status_code=200)
+
 
 # Lockedown Route
-@app.get("/mentorskool/v1/sales", tags=["sales"], dependencies=[Depends(auth.get_api_key)])
+@app.get("/mentorskool/v1/sales", tags=["Sales"], dependencies=[Depends(auth.get_api_key)])
 ## Union:- https://www.reddit.com/r/Python/comments/vcvyok/unionstr_none_vs_optionalstr/
 async def read_current_user(offset: Union[int, None] = None, limit: Union[int, None] = None):
     if not offset:
