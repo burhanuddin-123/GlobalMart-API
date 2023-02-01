@@ -14,7 +14,7 @@ def paginate(start, limit):
         meta["limit"] = limit
         meta["next"] = f'/mentorskool/v1/sales?start={start+limit}&limit={limit}'
         meta["previous"] = ""
-        meta["data"] = data
+        data.update(meta)
     elif (start+limit)>=total_records:
         ## We are subtracting 1 from extra_demand because, as in case if start is 9819, and limit is 5 thus by calculation extra_demand 
         # is of 4 records but in actual extra_demand is of 3 records only as 9818 and 9819 are present.
@@ -27,7 +27,8 @@ def paginate(start, limit):
         meta["limit"] = limit
         meta["next"] = ""
         meta["previous"] = f'/mentorskool/v1/sales?start={start-limit}&limit={limit}'
-        meta["data"] = data
+        # meta["data"] = data
+        data.update(meta)
     else:
         data = fetch_sales_data(start, limit)
         meta["limit"] = limit
@@ -36,9 +37,10 @@ def paginate(start, limit):
             meta["previous"] = f'/mentorskool/v1/sales?start={1}&limit={limit}'
         else:
             meta["previous"] = f'/mentorskool/v1/sales?start={start-limit}&limit={limit}'
-        meta["data"] = data
+        # meta["data"] = data
+        data.update(meta)
 
-    return meta
+    return data
 
 if __name__ == "__main__":
     meta = paginate(1, 100)
