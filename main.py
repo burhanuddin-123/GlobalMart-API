@@ -14,6 +14,7 @@ from paginate import paginate
 from fastapi.security.api_key import APIKey
 from fastapi.responses import HTMLResponse
 import auth
+# from fastapi.middleware.cors import CORSMiddleware
 
 description = """
 ## Industry Background:
@@ -94,6 +95,16 @@ app = FastAPI(
     },
     openapi_tags=tags_metadata
 )
+
+# origins=["*"]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     alow_methods=["*"],
+#     allow_headers=["*"]
+# )
 
 html_response = """
         <h1> Endpoints: </h1>
