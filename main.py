@@ -14,6 +14,7 @@ from paginate import paginate
 from fastapi.security.api_key import APIKey
 from fastapi.responses import HTMLResponse
 import auth
+# from fastapi.middleware.cors import CORSMiddleware
 
 description = """
 ## Industry Background:
@@ -95,13 +96,23 @@ app = FastAPI(
     openapi_tags=tags_metadata
 )
 
+# origins=["*"]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=origins,
+#     allow_credentials=True,
+#     alow_methods=["*"],
+#     allow_headers=["*"]
+# )
+
 html_response = """
         <h1> Endpoints: </h1>
         <font size=5px>
         <ol>
-            <li> Document Endpoint: <b><u>/docs</u></b>
-            <li> API Endpoint: <b><u>/mentorskool/v1/sales</u></b>
-            <li> Readable Document: <b><u>/redoc</u></b>
+            <li> Document Endpoint: <b><u><a href="/docs">/docs</a></u></b>
+            <li> API Endpoint: <b><u><a href="/mentorskool/v1/sales">/mentorskool/v1/sales<a></u></b>
+            <li> Readable Document: <b><u><a href="/redoc">/redoc</a></u></b>
         </ol>
         </font>
     """
@@ -132,3 +143,6 @@ async def read_current_user(offset: Union[int, None] = None, limit: Union[int, N
         return final_data
     else:
         return final_data
+
+
+### Runs the file using following command:- uvicorn <file_name>:app --reload, Ex:- uvicorn main:app --reload
