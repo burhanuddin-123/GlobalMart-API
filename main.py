@@ -8,7 +8,7 @@
 
 
 from typing import Union
-from fastapi import Depends, FastAPI #, HTTPException, status
+from fastapi import Depends, FastAPI, Response, status #, HTTPException, status
 from paginate import paginate
 # New Imports for app.py
 from fastapi.security.api_key import APIKey
@@ -125,7 +125,7 @@ async def index():
 # Lockedown Route
 @app.get("/mentorskool/v1/sales", tags=["Sales"], dependencies=[Depends(auth.get_api_key)])
 ## Union:- https://www.reddit.com/r/Python/comments/vcvyok/unionstr_none_vs_optionalstr/
-async def read_current_user(offset: Union[int, None] = None, limit: Union[int, None] = None):
+async def read_current_user(response: Response, offset: Union[int, None] = None, limit: Union[int, None] = None):
     if not offset:
         offset = 1
     
@@ -135,11 +135,13 @@ async def read_current_user(offset: Union[int, None] = None, limit: Union[int, N
         limit=100
     
     if offset < 0 or limit < 0:
+        response.status_code = status.HTTP_400_BAD_REQUEST
         return {"message": "Pass the valid values for parameters"}
     final_data = paginate(offset, limit)
 
     # return {"message": "Fetch successfully!!"}
     if final_data.get("message"):
+        response.status_code = status.HTTP_400_BAD_REQUEST
         return final_data
     else:
         return final_data
