@@ -12,7 +12,7 @@ def paginate(start, limit):
     elif start==1:
         data = fetch_sales_data(start, limit)
         meta["limit"] = limit
-        meta["next"] = f'/mentorskool/v1/sales?start={start+limit}&limit={limit}'
+        meta["next"] = f'/mentorskool/v1/sales?offset={start+limit}&limit={limit}'
         meta["previous"] = ""
         data.update(meta)
     elif (start+limit)>=total_records:
@@ -26,17 +26,17 @@ def paginate(start, limit):
         data = fetch_sales_data(start, limit)
         meta["limit"] = limit
         meta["next"] = ""
-        meta["previous"] = f'/mentorskool/v1/sales?start={start-limit}&limit={limit}'
+        meta["previous"] = f'/mentorskool/v1/sales?offset={start-limit}&limit={limit}'
         # meta["data"] = data
         data.update(meta)
     else:
         data = fetch_sales_data(start, limit)
         meta["limit"] = limit
-        meta["next"] = f'/mentorskool/v1/sales?start={start+limit}&limit={limit}'
+        meta["next"] = f'/mentorskool/v1/sales?offset={start+limit}&limit={limit}'
         if (start-limit)<0:
-            meta["previous"] = f'/mentorskool/v1/sales?start={1}&limit={limit}'
+            meta["previous"] = f'/mentorskool/v1/sales?offset={1}&limit={limit}'
         else:
-            meta["previous"] = f'/mentorskool/v1/sales?start={start-limit}&limit={limit}'
+            meta["previous"] = f'/mentorskool/v1/sales?offset={start-limit}&limit={limit}'
         # meta["data"] = data
         data.update(meta)
 
